@@ -1,9 +1,10 @@
 .DS_Store
 
 # Local export/runtime noise
-workspace/.openclaw/
-workspace/agent-workspaces/*/.openclaw/
-workspace/experiments/mem0/.venv/
-workspace/memory/review/session-history-index.json.lock
-workspace/skills/.skills_store_lock.json
-workspace/memory-sync.log
+workspace/**/.openclaw/
+workspace/**/__pycache__/
+workspace/**/*.pyc
+workspace/**/*.lock
+workspace/**/*.log
+workspace/**/.venv/
+workspace/**/._tasks

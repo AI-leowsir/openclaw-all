@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "skills": {
+    "seo-audit-report": {
+      "name": "SEO Audit Report",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=seo-audit-report",
+      "source": "skillhub",
+      "version": "1.0.0"
+    },
+    "debug-pro": {
+      "name": "Debug Pro",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=debug-pro",
+      "source": "skillhub",
+      "version": "1.0.0"
+    },
+    "self-improving-agent": {
+      "name": "self-improving-agent",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=self-improving-agent",
+      "source": "skillhub",
+      "version": "1.0.11"
+    },
+    "multi-search-engine": {
+      "name": "Multi Search Engine",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=multi-search-engine",
+      "source": "skillhub",
+      "version": "2.0.1"
+    },
+    "writing-polish": {
+      "name": "Writing Polish",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=writing-polish",
+      "source": "skillhub",
+      "version": "1.0.0"
+    },
+    "humanizer-zh": {
+      "name": "humanizer-zh",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=humanizer-zh",
+      "source": "skillhub",
+      "version": "1.0.0"
+    },
+    "weather": {
+      "name": "Weather",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=weather",
+      "source": "skillhub",
+      "version": "1.0.0"
+    },
+    "tmux": {
+      "name": "Tmux",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=tmux",
+      "source": "skillhub",
+      "version": "1.0.0"
+    },
+    "video-frames": {
+      "name": "Video Frames",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=video-frames",
+      "source": "skillhub",
+      "version": "1.0.0"
+    },
+    "node-connect": {
+      "name": "node-connect",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=node-connect",
+      "source": "skillhub",
+      "version": "1.0.0"
+    },
+    "skill-creator": {
+      "name": "Skill Creator",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=skill-creator",
+      "source": "skillhub",
+      "version": "0.1.0"
+    },
+    "openclaw-healthcheck": {
+      "name": "OpenClaw Healthcheck",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=openclaw-healthcheck",
+      "source": "skillhub",
+      "version": "0.1.1"
+    },
+    "feishu": {
+      "name": "Feishu",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=feishu",
+      "source": "skillhub",
+      "version": "1.0.5"
+    },
+    "seo-geo-audit": {
+      "name": "SEO + GEO Audit",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=seo-geo-audit",
+      "source": "skillhub",
+      "version": "1.0.4"
+    },
+    "openclaw-agent-optimize": {
+      "name": "Openclaw Agent Optimize",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=openclaw-agent-optimize",
+      "source": "skillhub",
+      "version": "1.2.1"
+    },
+    "openclaw-token-optimizer": {
+      "name": "OpenClaw Token Optimizer",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=openclaw-token-optimizer",
+      "source": "skillhub",
+      "version": "3.0.0"
+    }
+  }
+}
