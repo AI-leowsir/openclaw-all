@@ -1,0 +1,15 @@
+# MEMORY.md
+
+## Long-term notes
+
+- 用户偏好中文交流，喜欢直接、少废话、先讲结论的回答风格。
+- Leo 偏好“直接执行 + 分阶段反馈”，不喜欢长解释后没有产出。
+- 复盘类任务不能只基于当前窗口下结论，必须先补足相关会话、transcript、工具结果和关键文件。
+- `MEMORY.md` 只承接周复盘提炼出的长期规则 / 长期结论，不承接周报式细节与过程摘要。
+- 对所有定时流程，是否真正“跑通”不能只看文件产出，还必须确认用户收到了清晰完成通知。
+- 涉及“先看材料、先学习、先提炼规则”的任务，一律先交给 `learning_agent`，不得直接交给 `writing_agent`。
+- 标准链路固定为：`learning_agent` 学 → `organizing_agent` 整 → `writing_agent` 写；不得跳过 `organizing_agent`，不得边学边写。
+- `learning_agent` 学，`organizing_agent` 整，`writing_agent` 写；三者不得混用、串岗或互相替代。
+- `writing_agent` 的输入应是 `organizing_agent` 输出的结构化结果，而不是原始材料。
+- 分配任务时按职责边界判断，不按“谁也能做”判断；不能把能做当成该做。
+- 一旦发现任务已分错 agent，先纠正职责链，再继续执行。

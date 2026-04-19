@@ -1,0 +1,404 @@
+---
+name: deep-review
+description: Enforce a strict daily/weekly review workflow that reconstructs full execution chains, prevents shallow single-segment reviews, and distills durable long-term rules into MEMORY.md. Use when the user asks for a daily review, weekly review, 日复盘, 周复盘, 日总结, 周总结, 当天回顾, day-end recap, weekly recap, or asks whether the agent only reviewed one segment; also use for scheduled reviews at 22:00 daily and 22:40 every Sunday.
+---
+
+# Deep Review
+
+Execute a strict review workflow that treats review as an evidence-based audit plus structured output process.
+
+## Core objective
+
+Use review to:
+- reconstruct the actual execution chain
+- prevent shallow reviews that only inspect the latest segment
+- extract deviations and root causes
+- produce structured daily/weekly review files
+- distill long-term rules and long-term conclusions into `MEMORY.md` when the threshold is met
+
+Do not turn review into motivational summary, loose impressions, or a simple result list.
+
+## Hard rules
+
+Always follow these rules:
+- Review all relevant sessions, not just the current window.
+- Treat group chat as a major input source.
+- Treat all user messages as input.
+- Include assistant messages only when they contain commitments, conclusions, errors, or corrections.
+- Include tool results.
+- Include key files that were actually written or modified.
+- Restrict key files to rules, skills, prompts, configs, and output files that directly affected results.
+- Rename any previous "覆盖说明" field to `复盘范围`.
+- Keep the full daily structure even when little happened; write concise sections instead of deleting sections.
+- When prior and later rules conflict, let later confirmed rules override earlier ones.
+- Build a session index before writing the final review.
+- When unresolved details remain, ask the user to confirm via clear A/B/C options before execution; do not guess.
+- Every time a group `chat_id` is identified, query and re-verify the current group name in real time, prefer the group name in the review body, and include `chat_id` only when necessary.
+- Review outputs must be organized by group dimension when group chats are involved.
+- The current conversation may be the trigger and notification destination, but it must not be assumed to be the full review scope.
+
+## Required evidence scope
+
+Gather evidence from:
+1. relevant chat sessions
+2. tool execution results
+3. key files actually written or modified
+4. sub-sessions / subagents when present
+5. same-day / same-period evidence backfill sources when raw transcript coverage is incomplete
+
+For daily review, discovery must treat the target date as a full evidence window rather than as a transcript-only filter. The goal is to reconstruct all same-day evidence first, then group it into task chains.
+
+Same-day / same-period evidence backfill sources include:
+- same-day output files whose content clearly reflects work completed during the target window
+- same-day session summaries or conversation summaries
+- same-day registry entries that indicate activity even when raw transcript hits are sparse
+- same-day tool-result chains that imply a missing input/output conversation chain
+- user-explicitly-mentioned missing topics, outputs, or conversation themes when the user says the current review still missed same-day content
+
+Relevant sessions include:
+- same-task-chain group chats
+- direct sessions that directly affected results
+- sub-sessions that directly affected task progress
+- sessions containing scope changes, corrections, confirmations, rule closure, or key conclusions
+- sessions with concrete tool execution, file changes, or result handoff
+
+For daily review under the user's current policy, all same-day conversations remain in-scope once discovered, even if some are low-density.
+
+Usually exclude:
+- unrelated casual chat
+- side conversations that did not affect outcomes
+- noisy sessions disconnected from the task chain
+- direct transcript records tagged `(System)` when they contain no `[User]` chat content relevant to the review scope
+
+Restrict key files to:
+- rule files
+- skill files
+- prompt files
+- config files
+- output files that directly affected results
+
+For multi-session work:
+- collect evidence session by session first
+- then merge it by task chain and timeline
+- treat all user messages as input
+- compress the final output if needed, but never drop turning points, correction points, confirmation points, or result-changing points
+- never let the latest session dominate the narrative by default when earlier same-day sessions are also in scope
+- when multiple same-day sessions are included, explicitly reconstruct from earliest to latest rather than starting from the current trigger window
+- every included relevant session must leave at least one trace in the final daily review body: either a concrete summary point in `今日关键对话` / `今日关键事实 / 关键结果`, or an explicit note that the session was low-density and only affected coverage
+- if a relevant session appears in the session index but leaves no trace in the final body, the daily review is invalid
+
+## Daily review scope
+
+Daily review uses the natural day:
+- `00:00-23:59`
+
+Run at:
+- `22:00` every day
+
+If the run is missed, run on the next heartbeat or idle window.
+
+Daily review candidate discovery must cover the full date range first, not just the current conversation.
+All same-day sessions are candidates, including:
+- group chats
+- direct chats
+- sub-sessions
+
+Discovery priority for daily review:
+1. **`memory/review/session-history-index.json`** as the authoritative pre-built session index — read it first to get the complete list of all transcript files (including compacted/reset files) active on the target date, with Beijing-time date attribution already computed
+2. for each candidate file listed in the index for the target date, read the actual transcript to extract evidence
+3. `/root/.openclaw/agents/main/sessions/sessions.json` as the local session registry for CURRENT ACTIVE sessions only (does not contain historical reset data)
+4. same-day output files, same-day summaries, and same-day tool-result chains as mandatory backfill sources when transcript coverage looks sparse or incomplete
+5. `sessions_list` only as an auxiliary source
+
+Session history index usage rules:
+- the index file is auto-generated daily at 21:00 by `tools/build-session-index.py`
+- it contains `dateIndex` keyed by Beijing-time date strings (YYYY-MM-DD), each mapping to an array of session entries with file paths, message counts, time ranges, and topic hints
+- during discovery, look up `dateIndex[target_date]` to get the **complete** candidate set, including both active `.jsonl` files and historical `.jsonl.reset.*` files
+- do NOT skip reset files — they contain the majority of historical conversation data
+- use `userMessageCount` and `topics` from the index to prioritize which files to read in detail
+- if the index file is missing or stale (check `generatedAt`), fall back to manual transcript directory scanning
+
+Use full transcript scanning plus registry cross-check to enumerate same-day candidates. Do not rely on `sessions_list` as the main source. Do not rely on same-day file mtime as the primary discovery filter.
+
+Daily review discovery must not stop after finding only a few raw transcript hits if the same target day also contains additional same-day output files, summaries, or tool-result chains that imply more same-day work happened.
+
+For timestamp handling during discovery:
+- parse original transcript timestamps in their original format first
+- when timestamps are UTC `Z`, convert them to Asia/Shanghai before deciding whether a message belongs to the target day
+- day-boundary inclusion for daily review must be judged by Beijing time (`Asia/Shanghai`, UTC+8), not by raw UTC calendar date strings
+- never use raw UTC date substrings, raw `YYYY-MM-DD` prefix matching, or transcript file mtimes as the primary day-membership test
+- if any discovery script or ad-hoc command produces both a raw-UTC candidate set and a Beijing-time candidate set, treat the Beijing-time set as authoritative for daily review
+- if the Beijing-time reconstruction shows additional same-day sessions that were absent from a raw-UTC scan, mark the raw-UTC result as incomplete and continue discovery instead of writing the review
+
+For direct transcripts, ignore records tagged `(System)` and only treat chats labeled `[User]` as reviewable conversation evidence.
+
+If the agent cannot confidently find all same-day sessions after repeated discovery attempts, the daily review is considered failed and the failure must be sent to the user.
+
+A daily review must also be treated as incomplete if any of these conditions hold:
+- same-day output files exist but cannot be traced back to at least one same-day task chain or conversation chain
+- same-day tool-result evidence exists but the surrounding same-day user/task chain is still missing
+- same-day summaries indicate additional work themes that are absent from the current candidate set
+- the user explicitly says same-day content is still missing and provides missing themes/topics, but those themes have not yet been re-searched across the target date evidence window
+
+When any of the above happens, stop writing the review and continue discovery instead of producing a partial daily review.
+
+## Weekly review scope
+
+Weekly review uses the natural week.
+
+Run at:
+- `22:40` every Sunday
+
+If the run is missed, run on the next heartbeat or idle window.
+
+Weekly review is primarily a consolidation layer over the week's daily reviews.
+Its main job is to:
+- collect the week's daily review files first
+- merge repeated patterns, repeated constraints, repeated deviations, and repeated conclusions
+- distill stable collaboration rules, durable conclusions, candidate long-term items, and open questions
+
+For weekly review, sessions / transcripts / tool logs remain important, but they are coverage-validation sources rather than the main narrative source.
+Use them to:
+- verify whether the week's daily reviews missed key sessions, key groups, key corrections, or major outputs
+- confirm coverage risks and missing evidence
+- patch obvious omissions in the weekly review when daily reviews were incomplete
+
+Do not turn weekly review into a second full pass that rewrites the entire week's raw session timeline unless the daily reviews are missing, invalid, or clearly incomplete.
+
+Correct weekly-review priority:
+1. weekly daily-review outputs
+2. related weekly output files and review indexes
+3. sessions / transcripts / tool results only for coverage validation and omission checks
+
+For direct transcripts used in weekly coverage validation, ignore records tagged `(System)` and only treat chats labeled `[User]` as reviewable conversation evidence.
+
+## Invalid review conditions
+
+A review is invalid if it:
+- inspects only one content segment
+- ignores the start / turning point / result chain
+- omits key tasks, key dialogues, or results
+- lacks deviation analysis
+- treats one session as the whole context when the work was cross-session
+- lists results without process reconstruction
+- writes rootless judgments or vague impressions
+- mixes detailed review content with long-term memory storage rules
+
+Do not label the final output as "合格/不合格", but enforce the standard internally.
+
+## Daily review output
+
+Time presentation rule for review output:
+- unless the user explicitly asks for raw UTC or original transcript timestamps, present times in Beijing time (`Asia/Shanghai`, UTC+8)
+
+
+Always use this section order:
+1. 今日关键任务
+2. 今日关键对话
+3. 今日关键事实 / 关键结果
+4. 今日关键偏差
+5. 偏差开始节点
+6. 根因分析
+7. 复盘范围
+8. 新增认知候选（可选）
+
+Daily writing emphasis:
+- The body must focus primarily on the user's business instructions, newly learned knowledge / newly confirmed facts, and concrete task gaps / deviations / risks.
+- Execution details of the review itself (indexing, scanning, verification, coverage validation) may be mentioned only briefly inside `复盘范围` and must not dominate the body.
+- Do not spend major body space re-explaining review rules, review process, or self-justification.
+- The optional `新增认知候选` section is for same-day newly learned knowledge / newly confirmed facts only; it is a candidate layer for weekly distillation and does not directly update `MEMORY.md`.
+- Do not use machine-action tags such as `<memory_update>` in daily review output.
+
+If little happened, keep every section and write a concise statement instead of removing sections.
+
+Read `references/daily-template.md` before writing the final daily review.
+
+## Weekly review output
+
+Always use this section order:
+1. 本周主要工作
+2. 本周反复出现 / 被强调的事
+3. 本周关键事实
+4. 本周重复偏差
+5. 本周根因归类
+6. 本周产出
+7. 下周动作
+8. 长期规则沉淀
+9. 复盘范围
+
+Inside `长期规则沉淀`, always separate:
+- passed items that may enter `MEMORY.md`
+- candidate items that remain under observation
+
+Read `references/weekly-template.md` before writing the final weekly review.
+
+## Deviation analysis standard
+
+Describe deviations directly and bluntly. Use the fixed severity levels:
+- 严重
+- 中等
+- 轻微
+
+For major deviations, cover:
+1. what deviated
+2. where the deviation began
+3. why it happened
+4. what root-cause category it belongs to
+5. whether it repeated
+6. how much it affected the result
+7. whether it should become a long-term rule or long-term conclusion
+
+## MEMORY.md distillation rules
+
+`MEMORY.md` is a long-term memory layer, not a weekly report, index, or file directory.
+
+Only write:
+- long-term rules
+- long-term conclusions
+
+Never write:
+- next-week actions
+- file paths
+- indexes
+- "where to read details"
+- weekly-report summaries
+- temporary phenomena
+- one-off problems
+- detailed process descriptions
+
+Daily reviews do not write to `MEMORY.md`.
+Only weekly reviews may update `MEMORY.md`.
+
+Before writing `MEMORY.md`, read `references/memory-distillation.md`.
+
+## Long-term distillation threshold
+
+A candidate item may enter `MEMORY.md` only if it first satisfies both base conditions:
+- it is not a one-off detail
+- it can stand independently outside the original weekly review context
+
+Then at least two of these must be true:
+- it repeated
+- it affected results
+- it is likely to appear again in the future
+
+Interpret the three checks this way:
+- repeated: it appeared multiple times in the same week, across days/tasks, or reappeared from an earlier review pattern
+- affected results: it materially changed quality, efficiency, rework, judgment, or user experience
+- likely to reappear: it belongs to a recurring workflow, common collaboration pattern, or systemic issue
+
+If the threshold is not met:
+- do not force a write to `MEMORY.md`
+- keep the observation in the weekly review
+- it may be marked as a candidate long-term rule / conclusion for further observation
+- state clearly in the weekly review that there is no new long-term rule / conclusion, or that observation is still insufficient
+
+Candidate items belong in the weekly review only until they pass the threshold.
+Do not move candidate items into `MEMORY.md` early.
+In weekly output, present passed items and candidate items as separate layers rather than mixing them together.
+
+## Delivery rules
+
+Deep-review outputs must be delivered to the user directly. Do not require the user to open a file just to read the review.
+
+Default delivery destination:
+- the current main session / current user-visible conversation
+
+### Daily review delivery
+After every daily review, send the full daily review text in Chinese directly to the user.
+
+Daily delivery rules:
+- do not send a separate completion notification shell
+- send the daily review body itself
+- include the compressed `复盘范围` inside the body
+- append the review file path at the end
+- even if little happened, still send the full structured daily review
+- daily review must NEVER update `MEMORY.md`
+
+### Weekly review delivery
+After every weekly review, send the full weekly review text in Chinese directly to the user.
+
+Weekly delivery rules:
+- do not send a separate completion notification shell
+- send the weekly review body itself
+- append the weekly review file path at the end
+- if there are no new long-term rules / conclusions, explicitly state that inside the weekly review body
+
+### MEMORY.md approval and write-result delivery
+Daily review must never update `MEMORY.md`.
+
+Weekly review may evaluate candidate long-term rules / conclusions, but must NOT write them into `MEMORY.md` automatically.
+Instead, weekly review must use this approval flow:
+1. produce the weekly review body
+2. produce a second separate message containing the full candidate content proposed for `MEMORY.md`
+3. wait for explicit user approval
+4. only after approval may the agent write the approved content into `MEMORY.md`
+
+Second-message delivery rule after weekly review:
+- if there is candidate content for `MEMORY.md`: send the full candidate content to the user for approval
+- if there is no candidate content for `MEMORY.md`: send a separate message that explicitly says `没有`
+
+After approval and actual write:
+- explicitly tell the user that `MEMORY.md` was updated
+- send the full newly written / changed `MEMORY.md` content to the user outside the review body
+
+Before writing the weekly delivery text, read `references/weekly-notification-template.md` only as a lightweight wording reference where still applicable, but follow these approval and delivery rules first.
+
+## File paths
+
+Use these paths:
+- daily review: `memory/daily-review/YYYY-MM-DD.md`
+- weekly review: `memory/review/weekly/YYYY-MM-DD-weekly.md`
+- daily session index: `memory/review/index/YYYY-MM-DD-session-index.md`
+- weekly session index: `memory/review/index/YYYY-MM-DD-weekly-session-index.md`
+
+Update by overwriting the existing file for that day/week so the latest version remains authoritative.
+
+## Workflow
+
+Follow this order:
+
+### Phase 1 — Discovery subflow
+1. read `memory/review/session-history-index.json` and extract all candidate sessions / transcripts for the target date from `dateIndex[YYYY-MM-DD]`; if the index is missing, fall back to enumerating the session directory manually
+2. enumerate same-day output files, same-day summaries, and same-day tool-result chains that may indicate missing same-day work
+3. merge the time-window evidence into candidate task chains / conversation chains instead of treating raw transcript hits as the only discovery product
+4. build a session index and mark each item as relevant / irrelevant / uncertain with reasons
+5. write the session index file with final included evidence, excluded evidence, and coverage risks
+
+### Phase 2 — Review subflow
+6. for daily review: collect relevant sessions and sub-sessions from that indexed set
+7. for daily review: collect relevant tool outputs
+8. for daily review: collect same-day output files / summaries that directly affected results or prove additional same-day task chains existed
+9. for daily review: identify key task chains and key dialogue chains
+10. for daily review: reconstruct the timeline from earliest included same-day session to latest included same-day session; do not start from the newest segment by convenience
+11. for daily review: before finalizing, run a coverage check against the session index and verify every relevant session is reflected in the body, or explicitly marked as low-density
+12. for daily review: if same-day outputs or same-day summaries still have no explained source chain in the body, return to discovery and do not finalize
+13. for daily review: mark deviations and their start points, analyze root causes, and write the daily review
+14. for weekly review: collect the week's daily review files first and treat them as the primary narrative input
+15. for weekly review: merge repeated patterns, repeated constraints, repeated deviations, repeated conclusions, and repeated candidate items across daily reviews
+16. for weekly review: use indexed sessions / transcripts / tool results only to validate coverage, detect omissions, and patch missing high-impact evidence
+17. write the weekly review with the required structure
+18. for weekly review, evaluate whether any long-term rule / conclusion passes the threshold
+19. do NOT write `MEMORY.md` automatically; instead produce candidate content and wait for explicit user approval
+20. after weekly review, send the full weekly review body plus the separate `MEMORY.md` candidate/`没有` message according to the delivery rules
+
+Daily review anti-omission check:
+- after drafting, compare the final body against the session index
+- if morning / earlier same-day sessions are in scope, verify they appear in the body and not only in `复盘范围`
+- if the body only reflects the latest same-day session while earlier included sessions are missing, rewrite before delivery
+- before delivery, rebuild a Beijing-time timeline for the target day from the indexed evidence and verify the final review reflects the day's major time segments instead of only the latest segment
+- explicitly verify that every included session was assigned to the target day using Asia/Shanghai-converted timestamps rather than raw UTC day strings
+- if a session was included or excluded by a raw UTC day match before timezone conversion, treat that classification as untrusted and recompute it
+- explicitly compare same-day output files, same-day summaries, and same-day tool-result chains against the current task-chain list; if any same-day evidence item still lacks a source chain or body trace, the daily review is invalid
+- when the evidence window contains more same-day output themes than discovered raw transcript chains, treat transcript-only discovery as incomplete and continue discovery
+- if the user explicitly indicates there was same-day content that is still missing, stop delivery, continue discovery by target date using the user-mentioned themes as mandatory re-search terms, and do not guess
+
+Before Phase 1, read `references/session-index-template.md` and `references/discovery-prompt.md`.
+9. for weekly review: merge repeated patterns, repeated constraints, repeated deviations, repeated conclusions, and repeated candidate items across daily reviews
+10. for weekly review: use indexed sessions / transcripts / tool results only to validate coverage, detect omissions, and patch missing high-impact evidence
+11. write the weekly review with the required structure
+12. for weekly review, evaluate whether any long-term rule / conclusion passes the threshold
+13. do NOT write `MEMORY.md` automatically; instead produce candidate content and wait for explicit user approval
+14. after weekly review, send the full weekly review body plus the separate `MEMORY.md` candidate/`没有` message according to the delivery rules
+
+Before Phase 1, read `references/session-index-template.md` and `references/discovery-prompt.md`.

@@ -1,0 +1,22 @@
+{
+  "task_id": "2026-04-15-001",
+  "created_at": "2026-04-15T10:00:00+08:00",
+  "created_by": "main",
+  "task_type": "learn_and_build_playbook",
+  "target_channel": "seo",
+  "page_type": "product-page",
+  "language": "zh-CN",
+  "priority": "high",
+  "source_policy": {
+    "user_sources_first": true,
+    "public_sources_allowed": true
+  },
+  "input_modes": ["domain", "url", "sample_text", "document", "image", "video"],
+  "call_mode": "auto",
+  "agents": {
+    "learning_agent": "enabled",
+    "seo_organizing_agent": "enabled",
+    "writing_agent": "disabled"
+  },
+  "notes": "先做 SEO 规则沉淀，不直接发文"
+}

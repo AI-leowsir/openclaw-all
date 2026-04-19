@@ -1,0 +1,12 @@
+realtime:
+  owner: main
+  session: main
+scheduled:
+  session: isolated
+one_shot:
+  session: isolated
+  delete_after_run: true
+handoff:
+  agent_to_agent_direct_chat: false
+  transition_requires_done_marker: true
+  transition_requires_status_done: true

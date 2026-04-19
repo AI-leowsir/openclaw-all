@@ -1,0 +1,61 @@
+# Weekly Review Template
+
+Use this exact section order.
+
+## 0. 上周动作回顾
+- 汇总本周所有日复盘中的 `明日改进动作`
+- 统计：共 N 条改进动作，✅ 已执行 X 条，❌ 未执行 Y 条，➖ 不适用 Z 条
+- 列出未执行的改进动作及原因
+- 如果本周日复盘均无 `明日改进动作` 模块（旧模板），写"本周日复盘均无改进动作模块，跳过回顾"
+
+## 1. 本周主要工作
+- 本周最重要的任务链
+- 关键执行方向
+
+## 2. 本周反复出现 / 被强调的事
+- 反复出现的问题
+- 用户多次强调的要求
+- 多次影响判断的约束
+
+## 3. 本周关键事实
+- 本周最影响结论的事实
+- 关键成果与关键变化
+
+## 4. 本周重复偏差
+- 重复出现的偏差
+- 偏差等级：严重 / 中等 / 轻微
+- 是否构成系统性问题
+
+## 5. 本周根因归类
+- 将根因分组整理
+- 区分一次性问题与系统性问题
+
+## 6. 本周产出
+- 本周形成的主要产出
+- 已经落地的文件、规则、配置、决策
+
+## 7. 下周动作
+- 具体、可执行、非空泛
+
+## 8. 长期规则沉淀
+### 已沉淀项（可进入 `MEMORY.md`）
+- 通过门槛的长期规则
+- 通过门槛的长期结论
+- 若没有：明确写“本周无新增长期规则/长期结论”
+
+### 候选项（暂不进入 `MEMORY.md`）
+- 尚未通过门槛、但值得继续观察的候选长期规则
+- 尚未通过门槛、但值得继续观察的候选长期结论
+- 若没有：明确写“本周无候选长期规则/候选长期结论”
+
+## 9. 复盘范围
+- 覆盖的会话范围
+- 是否跨会话
+- 是否包含群聊、子会话、工具结果、关键文件
+
+## Writing rules
+- Do not merely concatenate daily reviews.
+- Extract repeated patterns and repeated root causes.
+- Distinguish weekly outputs from MEMORY.md content.
+- In the long-term distillation section, explicitly separate passed items from candidate items.
+- Only passed items are MEMORY-worthy; candidate items stay in the weekly review and must not be written into `MEMORY.md`.

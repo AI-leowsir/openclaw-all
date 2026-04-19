@@ -1,0 +1,31 @@
+{
+  "providers": {
+    "wsir": {
+      "baseUrl": "https://tarotap.pro/v1",
+      "apiKey": "sk-e311b0c221ffbb773933521ea31cd5d963649ff0331cd854f9d1a66fc3bf7eab",
+      "auth": "token",
+      "api": "openai-codex-responses",
+      "authHeader": true,
+      "models": [
+        {
+          "id": "gpt-5.4",
+          "name": "gpt-5.4",
+          "api": "openai-codex-responses",
+          "reasoning": false,
+          "input": [
+            "text",
+            "image"
+          ],
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0
+          },
+          "contextWindow": 200000,
+          "maxTokens": 8192
+        }
+      ]
+    }
+  }
+}

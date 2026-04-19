@@ -1,0 +1,9 @@
+.DS_Store
+
+# Local export/runtime noise
+workspace/.openclaw/
+workspace/agent-workspaces/*/.openclaw/
+workspace/experiments/mem0/.venv/
+workspace/memory/review/session-history-index.json.lock
+workspace/skills/.skills_store_lock.json
+workspace/memory-sync.log

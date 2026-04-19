@@ -1,0 +1,14 @@
+default_channel: feishu
+default_target: oc_18670e031c0c78335ff946d6d1fff3ee
+rules:
+  - event: agent_task_done
+    deliver: true
+    summary_required: true
+  - event: review_required
+    deliver: true
+    summary_required: true
+  - event: blocked
+    deliver: true
+    summary_required: true
+  - event: intermediate_step
+    deliver: false

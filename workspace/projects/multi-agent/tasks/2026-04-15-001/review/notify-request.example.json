@@ -1,0 +1,11 @@
+{
+  "task_id": "2026-04-15-001",
+  "requested_by": "seo_organizing_agent",
+  "event": "review_required",
+  "deliver": true,
+  "channel": "feishu",
+  "target": "oc_18670e031c0c78335ff946d6d1fff3ee",
+  "priority": "medium",
+  "summary": "发现 3 条候选长期规则，等待用户确认。",
+  "artifacts": []
+}

@@ -1,0 +1,43 @@
+project:
+  name: multi-agent
+  root: /root/.openclaw/workspace
+  language: zh-CN
+  primary_scope:
+    - product-page
+    - category-page
+    - column-page
+agents:
+  main:
+    display_name: 主 Agent（main）
+    type: main
+    session: main
+    responsibilities:
+      - task_dispatch
+      - user_dialogue
+      - maintenance_dispatch
+      - result_summary
+  learning_agent:
+    display_name: 学习 Agent
+    type: worker
+    session: isolated
+    responsibilities:
+      - multimodal_ingest
+      - source_learning
+      - official_skill_scout
+  seo_organizing_agent:
+    display_name: SEO整理 Agent
+    type: worker
+    session: isolated
+    responsibilities:
+      - seo_knowledge_synthesis
+      - seo_rule_layering
+      - seo_rule_retrieval
+      - seo_rule_compaction
+  writing_agent:
+    display_name: 写作 Agent
+    type: worker
+    session: isolated
+    responsibilities:
+      - seo_page_writing
+      - seo_package_generation
+      - rewrite_with_feedback

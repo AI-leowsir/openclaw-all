@@ -1,0 +1,30 @@
+agents:
+  main:
+    role_skill: /root/.openclaw/workspace/projects/multi-agent/skills/main/SKILL.md
+    approved_market_skills: []
+    can_dispatch:
+      - learning_agent
+      - seo_organizing_agent
+      - writing_agent
+  learning_agent:
+    role_skill: /root/.openclaw/workspace/projects/multi-agent/skills/learning-agent/SKILL.md
+    approved_market_skills: []
+    capability_tags:
+      - multimodal-ingest
+      - source-learning
+      - official-skill-scout
+  seo_organizing_agent:
+    role_skill: /root/.openclaw/workspace/projects/multi-agent/skills/seo-organizing-agent/SKILL.md
+    approved_market_skills: []
+    capability_tags:
+      - seo-knowledge-synthesis
+      - seo-rule-retrieval
+      - seo-rule-compaction
+  writing_agent:
+    role_skill: /root/.openclaw/workspace/projects/multi-agent/skills/writing-agent/SKILL.md
+    approved_market_skills: []
+    capability_tags:
+      - product-page-writing
+      - category-page-writing
+      - column-page-writing
+      - rewrite-with-feedback

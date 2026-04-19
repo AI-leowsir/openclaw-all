@@ -1,0 +1,14 @@
+{
+  "task_id": "2026-04-15-001",
+  "agent": "learning_agent",
+  "status": "waiting_input",
+  "updated_at": "2026-04-15T22:45:00+08:00",
+  "summary": "输入不足：source-list 为模板，raw 无真实内容，attachments 为空。",
+  "output_files": [
+    "learning-agent/normalized/combined-text.md",
+    "learning-agent/observations/buyer-signals.yaml",
+    "learning-agent/artifacts/source-summary.md",
+    "learning-agent/artifacts/blocked.md"
+  ],
+  "blocking_reason": "缺少真实来源材料，无法进行学习、标准化提取与观察分析。"
+}

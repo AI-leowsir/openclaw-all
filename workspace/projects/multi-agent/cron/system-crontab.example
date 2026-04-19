@@ -1,0 +1,18 @@
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+# 说明：
+# 1. system cron 运行时不会自动加载 nvm，因此所有 OpenClaw 调用都必须经由 tools/run-openclaw.sh。
+# 2. 按框架要求：主 Agent（main）/人工发起学习 Agent；整理 Agent 与写作 Agent 通过 cron 读取上游输出文件接力启动。
+
+# 每周六 10:00：学习 Agent 巡检 OpenClaw 官方 skill
+0 10 * * 6 root /root/.openclaw/workspace/projects/multi-agent/cron/jobs/weekly-skill-scout.sh >> /root/.openclaw/workspace/projects/multi-agent/var/log/weekly-skill-scout.log 2>&1
+
+# 每 10 分钟第 2 分：整理 Agent 读取学习 Agent 已完成任务
+2-59/10 * * * * root /root/.openclaw/workspace/projects/multi-agent/cron/jobs/run-organizing-from-learning.sh >> /root/.openclaw/workspace/projects/multi-agent/var/log/run-organizing-from-learning.log 2>&1
+
+# 每 10 分钟第 7 分：写作 Agent 读取整理 Agent 已完成任务
+7-59/10 * * * * root /root/.openclaw/workspace/projects/multi-agent/cron/jobs/run-writing-from-organizing.sh >> /root/.openclaw/workspace/projects/multi-agent/var/log/run-writing-from-organizing.log 2>&1
+
+# 诊断脚本：仅用于排查文件交接状态，不作为主执行入口
+*/10 * * * * root /root/.openclaw/workspace/projects/multi-agent/cron/jobs/scan-handoffs.sh >> /root/.openclaw/workspace/projects/multi-agent/var/log/scan-handoffs.log 2>&1

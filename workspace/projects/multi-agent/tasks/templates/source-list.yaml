@@ -1,0 +1,23 @@
+# 来源清单模板
+# priority 只允许：must / reference / ignore
+# type 可用：domain / url / sample_text / document / image / video
+
+sources:
+  - id: src_001
+    priority: must
+    type: domain
+    value: https://example.com
+    notes: 这里写为什么必须学
+
+  - id: src_002
+    priority: reference
+    type: url
+    value: https://example.com/product-page
+    notes: 这里写参考原因
+
+  - id: src_003
+    priority: ignore
+    type: sample_text
+    value: |
+      这里可以直接粘贴样文。
+    notes: 这里写忽略原因

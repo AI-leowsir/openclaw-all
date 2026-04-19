@@ -1,0 +1,6 @@
+status: waiting_input
+summary: 暂无真实来源，无法识别 buyer signals
+signals: []
+missing_inputs:
+  - 真实域名、URL、样文、文档、图片或视频来源
+  - 来源优先级与业务目标说明

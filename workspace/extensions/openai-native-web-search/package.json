@@ -1,0 +1,10 @@
+{
+  "name": "openai-native-web-search",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "index.js",
+  "openclaw": {
+    "entry": "./index.js",
+    "extensions": ["./index.js"]
+  }
+}

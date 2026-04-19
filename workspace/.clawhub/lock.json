@@ -1,0 +1,109 @@
+{
+  "version": 1,
+  "skills": {
+    "openclaw-tavily-search": {
+      "version": "0.1.0",
+      "installedAt": 1775186700311
+    },
+    "memory-hygiene": {
+      "version": "1.0.0",
+      "installedAt": 1775186702539
+    },
+    "github": {
+      "version": "1.0.0",
+      "installedAt": 1775186704255
+    },
+    "agent-browser-clawdbot": {
+      "version": "0.1.0",
+      "installedAt": 1775186705784
+    },
+    "tencentcloud-lighthouse-skill": {
+      "version": "1.0.0",
+      "installedAt": 1775186708165
+    },
+    "tencent-docs": {
+      "version": "1.0.24",
+      "installedAt": 1775186713746
+    },
+    "tencent-cos-skill": {
+      "version": "1.0.6",
+      "installedAt": 1775186716231
+    },
+    "tencent-meeting-skill": {
+      "version": "1.0.5",
+      "installedAt": 1775186718942
+    },
+    "ima-skills": {
+      "version": "1.1.2",
+      "installedAt": 1775186721346
+    },
+    "web-tools-guide": {
+      "version": "1.0.1",
+      "installedAt": 1775186723702
+    },
+    "seo-audit-report": {
+      "version": "1.0.0",
+      "installedAt": 1775292941120
+    },
+    "debug-pro": {
+      "version": "1.0.0",
+      "installedAt": 1775371015583
+    },
+    "self-improving-agent": {
+      "version": "1.0.11",
+      "installedAt": 1775376538743
+    },
+    "multi-search-engine": {
+      "version": "2.0.1",
+      "installedAt": 1775394368738
+    },
+    "writing-polish": {
+      "version": "1.0.0",
+      "installedAt": 1775796405569
+    },
+    "humanizer-zh": {
+      "version": "1.0.0",
+      "installedAt": 1775796410168
+    },
+    "weather": {
+      "version": "1.0.0",
+      "installedAt": 1776223406103
+    },
+    "tmux": {
+      "version": "1.0.0",
+      "installedAt": 1776223410338
+    },
+    "video-frames": {
+      "version": "1.0.0",
+      "installedAt": 1776223413850
+    },
+    "node-connect": {
+      "version": "1.0.0",
+      "installedAt": 1776223418773
+    },
+    "skill-creator": {
+      "version": "0.1.0",
+      "installedAt": 1776223423540
+    },
+    "openclaw-healthcheck": {
+      "version": "0.1.1",
+      "installedAt": 1776224523495
+    },
+    "feishu": {
+      "version": "1.0.5",
+      "installedAt": 1776296349755
+    },
+    "seo-geo-audit": {
+      "version": "1.0.4",
+      "installedAt": 1776296353667
+    },
+    "openclaw-agent-optimize": {
+      "version": "1.2.1",
+      "installedAt": 1776296423269
+    },
+    "openclaw-token-optimizer": {
+      "version": "3.0.0",
+      "installedAt": 1776296427172
+    }
+  }
+}
