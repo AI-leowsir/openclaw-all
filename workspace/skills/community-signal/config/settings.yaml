@@ -1,0 +1,21 @@
+{
+  "timezone": "Asia/Shanghai",
+  "push_channel": "feishu",
+  "push_group_id": "oc_db72f7eba6d99f25f22e79678fb65e25",
+  "push_backend": "openclaw_cli",
+  "digest_time": "17:00",
+  "digest_max_items": 20,
+  "digest_min_score": 7,
+  "send_empty_digest": true,
+  "realtime_push_score": 99,
+  "realtime_max_per_day": 0,
+  "realtime_cooldown_minutes": 20,
+  "max_scrape_time_per_target": 600,
+  "max_scrape_time_total": 1800,
+  "minimum_scraped_items_per_scan": 20,
+  "minimum_scored_items_per_scan": 5,
+  "default_scrape_interval_hours": 8,
+  "temp_target_duration_days": 30,
+  "memory_file": "~/.openclaw/workspace/MEMORY.md",
+  "openclaw_binary": "openclaw"
+}

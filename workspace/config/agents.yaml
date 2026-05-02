@@ -1,6 +1,6 @@
 project:
   name: multi-agent
-  root: /root/.openclaw/workspace
+  root: /Users/wusir/.openclaw/workspace
   language: zh-CN
   primary_scope:
     - product-page
@@ -41,3 +41,19 @@ agents:
       - seo_page_writing
       - seo_package_generation
       - rewrite_with_feedback
+  consultant_agent:
+    display_name: 执行顾问 Agent
+    type: worker
+    session: isolated
+    responsibilities:
+      - knowledge_qa
+      - learning_job_ingest
+      - image_learning_ingest
+      - research_briefing
+      - requirement_intake
+      - task_shaping
+      - task_planning
+      - progress_tracking
+      - evidence_pack_diagnosis
+      - review_and_adjustment
+      - obsidian_wiki_append

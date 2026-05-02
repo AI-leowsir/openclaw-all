@@ -1,0 +1,77 @@
+{
+  "person_targets": {
+    "core_targets": [],
+    "temporary_targets": []
+  },
+  "monitoring_targets": [
+    {
+      "name": "scys 整站监控",
+      "platform": "scys",
+      "community_url": "https://scys.com",
+      "type": "site_monitor",
+      "entry_url": "https://scys.com",
+      "discovery_mode": "site_wide",
+      "preferred_feed_filter": "全部",
+      "preferred_sort": "最新发布",
+      "preferred_layout": "简洁",
+      "follow_external_doc": true,
+      "final_score_requires_full_doc": true,
+      "allow_preview_scoring_without_full_doc": true,
+      "minimum_preview_chars_for_scoring": 80,
+      "require_source_url_for_preview_scoring": true,
+      "published_date_scope": "current_day",
+      "delivery_delay_days": 1,
+      "max_post_age_days": 1,
+      "focus_topics": [
+        "AI工具",
+        "AI产品",
+        "AI出海",
+        "SEO"
+      ],
+      "digest_threshold": 7,
+      "realtime_threshold": 99,
+      "scrape_interval_hours": 24,
+      "minimum_scraped_items_per_scan": 20,
+      "minimum_scored_items_per_scan": 5,
+      "max_posts_per_scan": 60
+    },
+    {
+      "name": "GitHub AI Star Radar",
+      "platform": "github",
+      "type": "star_growth_monitor",
+      "entry_url": "https://github.com/search?type=repositories",
+      "discovery_mode": "github_search_cdp",
+      "focus_topics": [
+        "AI工具",
+        "AI开发者工具",
+        "AI产品",
+        "AI agent",
+        "LLM应用",
+        "MCP",
+        "RAG",
+        "代码生成",
+        "工作流自动化"
+      ],
+      "search_terms": [
+        "ai",
+        "llm",
+        "agent",
+        "rag",
+        "mcp",
+        "openai",
+        "codegen",
+        "developer-tools",
+        "workflow",
+        "inference",
+        "ai-tool",
+        "ai-agent"
+      ],
+      "scrape_interval_hours": 4,
+      "growth_window_hours": 48,
+      "max_repos_per_query": 25,
+      "max_projects_per_digest": 10,
+      "digest_threshold": 7,
+      "realtime_threshold": 99
+    }
+  ]
+}

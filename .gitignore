@@ -1,6 +1,24 @@
 .DS_Store
 
 # Local export/runtime noise
+.env
+**/.env
+**/*.env
+openclaw.json
+credentials/
+service-env/
+logs/
+sessions/
+browser/
+plugin-runtime-deps/
+workspace/memory/
+workspace/extensions/
+workspace/**/config/*.env
+workspace/skills/**/state/
+workspace/skills/**/*.jsonl
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
 workspace/**/.openclaw/
 workspace/**/__pycache__/
 workspace/**/*.pyc

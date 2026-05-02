@@ -37,6 +37,12 @@
   done.marker
 ```
 
+## 输出根目录判定
+- 本文默认描述的是标准 task 模式；此时 worker agent 的输出根目录分别是 `learning-agent/`、`seo-organizing-agent/`、`writing-agent/`。
+- 如果 worker agent 被直接单独打开，当前工作区会是 `agent-workspaces/<agent-name>/`，而不是某个 `<task_id>/` 任务目录。
+- 在这种独立调用模式下，输出必须写到 agent workspace 下的 `runs/<run-id>/`，不能在当前目录下再创建同名子目录。
+- 例如：`agent-workspaces/learning-agent/learning-agent/`、`agent-workspaces/seo-organizing-agent/seo-organizing-agent/`、`agent-workspaces/writing-agent/writing-agent/` 都属于错误结构。
+
 ## 学习 Agent 输出
 - `normalized/combined-text.md`
 - `normalized/source-map.yaml`

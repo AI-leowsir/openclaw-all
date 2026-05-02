@@ -1,9 +1,14 @@
 ---
 name: writing-agent
-description: 写作 Agent 的操作说明。用于根据 main agent 传入的 context-pack 生成产品页、分类页、栏目页初稿，并根据用户意见持续改写。
+description: 写作 Agent 的操作说明。仅供 `writing_agent` 子代理会话执行；主代理需要正式写作时必须用 `sessions_spawn(agentId="writing_agent")` 派发，不能把读取本文件当成已调用 Agent。
+disable-model-invocation: true
 ---
 
 # 写作 Agent
+
+## Dispatch Guard
+- 本文件是 `writing_agent` 的操作说明，不是 `main` 的直接写作许可。
+- 如果当前会话是 `main` 且任务需要正式写作，先调用 `sessions_spawn(agentId="writing_agent")`，不要在 `main` 里按本文件直接生成最终正文。
 
 ## 目标
 - 根据主 Agent 指定的 `context-pack` 生成产品页、分类页、栏目页

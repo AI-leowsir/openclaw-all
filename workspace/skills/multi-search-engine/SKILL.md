@@ -1,118 +1,47 @@
 ---
 name: "multi-search-engine"
-description: "Multi search engine integration with 17 engines (8 CN + 9 Global). Supports advanced search operators, time filters, site search, privacy engines, and WolframAlpha knowledge queries. No API keys required."
+description: "CDP-only search URL planning. Use only to choose search engines/operators, then open the result page in the OpenClaw-managed Chrome CDP browser. Do not use web_fetch, web_search, search APIs, or HTTP clients."
 ---
 
-# Multi Search Engine v2.0.1
+# Multi Search Engine (CDP-only)
 
-Integration of 17 search engines for web crawling without API keys.
+This skill is now a query-planning reference only. It must not be used as a crawler,
+search API, `web_fetch` shortcut, or non-CDP fallback.
 
-## Search Engines
+## Hard Rule
 
-### Default (International-first)
-- **Google**: `https://www.google.com/search?q={keyword}`
-- **Google HK**: `https://www.google.com.hk/search?q={keyword}`
-- **DuckDuckGo**: `https://duckduckgo.com/html/?q={keyword}`
-- **Yahoo**: `https://search.yahoo.com/search?p={keyword}`
-- **Startpage**: `https://www.startpage.com/sp/search?query={keyword}`
-- **Brave**: `https://search.brave.com/search?q={keyword}`
-- **Ecosia**: `https://www.ecosia.org/search?q={keyword}`
-- **Qwant**: `https://www.qwant.com/?q={keyword}`
-- **WolframAlpha**: `https://www.wolframalpha.com/input?i={keyword}`
+- All search result reading must happen in the OpenClaw-managed Chrome CDP browser at `http://127.0.0.1:9223`.
+- Do not call `web_fetch`, `web_search`, Tavily, browserless, curl, requests, urllib, httpx, direct search endpoints, JSON endpoints, old/mobile endpoints, or temporary scripts for page data.
+- If CDP is unavailable, not logged in, blocked, or rate-limited, stop that source and report `cdp_unavailable`, `needs_login_or_permission`, or `rate_limited`.
 
-### Domestic engines (disabled by default / manual-only)
-Do not use these proactively. Use them only when the user explicitly requests a specific domestic search engine or explicitly requires a China-specific platform source:
-- **Baidu**: `https://www.baidu.com/s?wd={keyword}`
-- **Sogou**: `https://sogou.com/web?query={keyword}`
-- **WeChat**: `https://wx.sogou.com/weixin?type=2&query={keyword}`
-- **Toutiao**: `https://so.toutiao.com/search?keyword={keyword}`
+## Allowed Use
 
-## Default Routing Policy
+Use this file only to construct a URL that will be opened in the CDP browser:
 
-- Default to international search engines for general web research.
-- Prefer Google / Google HK / DuckDuckGo / Brave / Startpage before other sources.
-- Do not proactively use domestic search engines.
-- Only use a domestic engine when the user explicitly requests that engine or explicitly requires a China-specific platform source.
-- After finding useful URLs, continue with `web_fetch` or `browser` as appropriate.
+- Google: `https://www.google.com/search?q={keyword}`
+- Google HK: `https://www.google.com.hk/search?q={keyword}`
+- Bing: `https://www.bing.com/search?q={keyword}`
+- DuckDuckGo: `https://duckduckgo.com/?q={keyword}`
+- Brave: `https://search.brave.com/search?q={keyword}`
+- Startpage: `https://www.startpage.com/sp/search?query={keyword}`
+- GitHub search: `https://github.com/search?q={keyword}`
+- Google Scholar: `https://scholar.google.com/scholar?q={keyword}`
 
-## Quick Examples
+Domestic engines are manual-only: use them only when the user explicitly asks for that engine or explicitly requires a China-specific source.
 
-```javascript
-// Basic search (default: international)
-web_fetch({"url": "https://www.google.com/search?q=python+tutorial"})
+## Operators
 
-// Site-specific
-web_fetch({"url": "https://www.google.com/search?q=site:github.com+react"})
+- `site:` searches within a site, for example `site:github.com browser cdp`.
+- `filetype:` targets a document type, for example `filetype:pdf annual report`.
+- Quoted text searches exact phrases.
+- `-term` excludes a term.
+- `OR` searches either term.
+- Google time filters may be appended to the URL, for example `tbs=qdr:w` for the past week.
 
-// File type
-web_fetch({"url": "https://www.google.com/search?q=machine+learning+filetype:pdf"})
+## Workflow
 
-// Time filter (past week)
-web_fetch({"url": "https://www.google.com/search?q=ai+news&tbs=qdr:w"})
-
-// Privacy search
-web_fetch({"url": "https://duckduckgo.com/html/?q=privacy+tools"})
-
-// DuckDuckGo Bangs
-web_fetch({"url": "https://duckduckgo.com/html/?q=!gh+tensorflow"})
-
-// Domestic engine example: manual-only when explicitly requested
-web_fetch({"url": "https://wx.sogou.com/weixin?type=2&query=AI+产品"})
-
-// Knowledge calculation
-web_fetch({"url": "https://www.wolframalpha.com/input?i=100+USD+to+CNY"})
-```
-
-## Advanced Operators
-
-| Operator | Example | Description |
-|----------|---------|-------------|
-| `site:` | `site:github.com python` | Search within site |
-| `filetype:` | `filetype:pdf report` | Specific file type |
-| `""` | `"machine learning"` | Exact match |
-| `-` | `python -snake` | Exclude term |
-| `OR` | `cat OR dog` | Either term |
-
-## Time Filters
-
-| Parameter | Description |
-|-----------|-------------|
-| `tbs=qdr:h` | Past hour |
-| `tbs=qdr:d` | Past day |
-| `tbs=qdr:w` | Past week |
-| `tbs=qdr:m` | Past month |
-| `tbs=qdr:y` | Past year |
-
-## Privacy Engines
-
-- **DuckDuckGo**: No tracking
-- **Startpage**: Google results + privacy
-- **Brave**: Independent index
-- **Qwant**: EU GDPR compliant
-
-## Bangs Shortcuts (DuckDuckGo)
-
-| Bang | Destination |
-|------|-------------|
-| `!g` | Google |
-| `!gh` | GitHub |
-| `!so` | Stack Overflow |
-| `!w` | Wikipedia |
-| `!yt` | YouTube |
-
-## WolframAlpha Queries
-
-- Math: `integrate x^2 dx`
-- Conversion: `100 USD to CNY`
-- Stocks: `AAPL stock`
-- Weather: `weather in Beijing`
-
-## Documentation
-
-- `references/advanced-search.md` - Domestic search guide
-- `references/international-search.md` - International search guide
-- `CHANGELOG.md` - Version history
-
-## License
-
-MIT
+1. Build the search URL.
+2. Open the URL in the CDP-controlled browser.
+3. Read and verify result snippets/links from the rendered page.
+4. Open target pages in the same CDP-controlled browser.
+5. Record coverage gaps instead of switching to non-CDP fetching.

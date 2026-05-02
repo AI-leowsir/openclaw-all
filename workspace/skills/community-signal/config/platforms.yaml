@@ -1,0 +1,54 @@
+{
+  "platforms": {
+    "scys": {
+      "name": "scys",
+      "base_url": "https://scys.com",
+      "login_required": true,
+      "selectors": {
+        "site_feed": ".post-list-container",
+        "post_list": ".post-list-container .compact-card",
+        "post_click_target": ".post-list-container .compact-card",
+        "detail_link": "a[href*='/articleDetail/']",
+        "post_title": ".title-text",
+        "post_preview": ".content-preview",
+        "post_content": ".content-col",
+        "post_date": ".time-text",
+        "post_author": ".user-name",
+        "post_tags": ".tag-item",
+        "sort_value": ".arco-select-view-value",
+        "secondary_filter": ".vc-secondary-filter .filter-item.active",
+        "mode_selector": ".mode-switch-v3 .trigger-label, .mode-switch-v3, .mode-selector",
+        "detail_title": ".header-entity-title, .post-title",
+        "detail_body": ".post-content",
+        "detail_author": ".post-item-top .name",
+        "detail_date": ".post-item-top .date",
+        "detail_tags": ".tag-item",
+        "comments": ".comment-list-box .comment-block",
+        "comment_author": ".block-top .user-name",
+        "comment_content": ".block-top .content",
+        "comment_date": ".block-bottom .date",
+        "next_page": ".arco-pagination-item-next, .pagination .next"
+      },
+      "max_comments": 5,
+      "max_pages": 3,
+      "notes": "使用 OpenClaw 已有登录态访问 scys.com。监控入口以 https://scys.com 为准，不预先绑定到某个单独圈子。首页帖子流已校准到 .post-list-container .compact-card，运行时先切到 全部 + 最新发布 + 简洁。首页卡片存在两种情况：一类直接暴露 /articleDetail/ 链接，可进一步抓详情页摘要、评论和外链；另一类没有详情链接，只能先用首页 preview 参与筛选。很多高质量帖的完整正文实际放在飞书 wiki 里，命中候选后需沿着 detail.external_links 继续通过同一个 OpenClaw Chrome CDP 会话抓飞书正文。唯一抓取入口是 scripts/scrape_scys.mjs 连接 9223；选择器失效时停止并记录 coverage gap，不回退到 browserless-fetch、web_fetch、HTTP 脚本或搜索/API 端点。"
+    },
+    "indie_hackers": {
+      "name": "Indie Hackers",
+      "base_url": "https://www.indiehackers.com",
+      "login_required": true,
+      "selectors": {},
+      "max_comments": 5,
+      "max_pages": 2,
+      "notes": "页面结构复杂时走 LLM 提取兜底。"
+    },
+    "github": {
+      "name": "GitHub",
+      "base_url": "https://github.com/trending",
+      "login_required": false,
+      "selectors": {},
+      "max_pages": 1,
+      "notes": "作为 community-signal 的 GitHub AI Star Radar 数据源。使用 OpenClaw CDP 浏览器逐次打开本任务自己的 GitHub 页面，像人工一样点击搜索框、输入关键词并进入仓库搜索结果；本地 state/github_star_radar.json 保存 star 快照；日报候选按近 48 小时增长、仓库搜索结果和 AI 相关性排序。禁止 GitHub API、直连 HTML、web_fetch、web_search 或 browserless fallback。"
+    }
+  }
+}

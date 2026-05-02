@@ -1,0 +1,456 @@
+{
+  "agents": {
+    "defaults": {
+      "workspace": "/Users/wusir/.openclaw/workspace",
+      "bootstrapMaxChars": 30000,
+      "bootstrapTotalMaxChars": 200000,
+      "model": {
+        "primary": "wsir/gpt-5.5"
+      },
+      "models": {
+        "wsir/gpt-5.5": {}
+      },
+      "heartbeat": {
+        "lightContext": true,
+        "isolatedSession": true,
+        "skipWhenBusy": true
+      },
+      "compaction": {
+        "mode": "safeguard"
+      }
+    },
+    "list": [
+      {
+        "id": "main",
+        "subagents": {
+          "allowAgents": [
+            "*"
+          ],
+          "requireAgentId": false
+        },
+        "tools": {
+          "deny": [
+            "web_fetch",
+            "web_search"
+          ]
+        }
+      },
+      {
+        "id": "learning_agent",
+        "name": "learning_agent",
+        "workspace": "/Users/wusir/.openclaw/workspace/agent-workspaces/learning-agent",
+        "agentDir": "/Users/wusir/.openclaw/agents/learning_agent/agent",
+        "model": "wsir/gpt-5.5",
+        "tools": {
+          "deny": [
+            "web_fetch",
+            "web_search"
+          ]
+        }
+      },
+      {
+        "id": "seo_organizing_agent",
+        "name": "seo_organizing_agent",
+        "workspace": "/Users/wusir/.openclaw/workspace/agent-workspaces/seo-organizing-agent",
+        "agentDir": "/Users/wusir/.openclaw/agents/seo_organizing_agent/agent",
+        "model": "wsir/gpt-5.5",
+        "tools": {
+          "deny": [
+            "web_fetch",
+            "web_search"
+          ]
+        }
+      },
+      {
+        "id": "writing_agent",
+        "name": "writing_agent",
+        "workspace": "/Users/wusir/.openclaw/workspace/agent-workspaces/writing-agent",
+        "agentDir": "/Users/wusir/.openclaw/agents/writing_agent/agent",
+        "model": "wsir/gpt-5.5",
+        "tools": {
+          "deny": [
+            "web_fetch",
+            "web_search"
+          ]
+        }
+      },
+      {
+        "id": "consultant_agent",
+        "name": "consultant_agent",
+        "workspace": "/Users/wusir/.openclaw/workspace/projects/consultant-agent",
+        "agentDir": "/Users/wusir/.openclaw/agents/consultant_agent/agent",
+        "model": "wsir/gpt-5.5",
+        "tools": {
+          "deny": [
+            "web_fetch",
+            "web_search"
+          ]
+        }
+      },
+      {
+        "id": "community_signal_agent",
+        "name": "community_signal_agent",
+        "workspace": "/Users/wusir/.openclaw/workspace/agent-workspaces/community-signal-agent",
+        "agentDir": "/Users/wusir/.openclaw/agents/community_signal_agent/agent",
+        "model": "wsir/gpt-5.5",
+        "tools": {
+          "deny": [
+            "web_fetch",
+            "web_search"
+          ]
+        }
+      }
+    ]
+  },
+  "gateway": {
+    "mode": "local",
+    "auth": {
+      "mode": "token",
+      "token": "<redacted>"
+    },
+    "port": 18789,
+    "bind": "loopback",
+    "controlUi": {
+      "allowInsecureAuth": true
+    },
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    }
+  },
+  "browser": {
+    "defaultProfile": "openclaw",
+    "executablePath": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "headless": false,
+    "profiles": {
+      "openclaw": {
+        "driver": "openclaw",
+        "cdpPort": 9223,
+        "color": "#4285F4"
+      }
+    }
+  },
+  "session": {
+    "dmScope": "per-channel-peer"
+  },
+  "channels": {
+    "feishu": {
+      "enabled": true,
+      "domain": "feishu",
+      "connectionMode": "websocket",
+      "appId": "cli_a96ee71773f8dcc4",
+      "appSecret": "<redacted>",
+      "dmPolicy": "pairing",
+      "groupPolicy": "open",
+      "requireMention": false,
+      "groups": {
+        "*": {
+          "systemPrompt": "飞书群任务必须遵守工作区 CDP-only 网页采集规则。所有网页抓取、搜索结果读取、页面学习、内容提取、站点监控和资料采集，唯一允许的数据来源是 OpenClaw 管理的 Chrome CDP http://127.0.0.1:9223。禁止使用 web_fetch、web_search、browserless-fetch、curl、requests/urllib/httpx、独立 Playwright profile、搜索引擎/API、old/mobile/JSON 端点直连、临时 /tmp/*.py 或 /tmp/*.js 绕过 browser/CDP 抓取页面数据。CDP/browser 超时、未登录、无权限或被限流时，必须停止该来源，记录 cdp_unavailable / needs_login_or_permission / rate_limited，向用户报告覆盖缺口并等待处理；不得降级到非 CDP 抓取，不得混入非 CDP 数据或伪造内容。使用 browser/CDP 前后必须执行 tab-guard snapshot/cleanup，只关闭本任务打开的标签页，严禁关闭 Chrome 窗口或用户原有标签页。"
+        }
+      }
+    },
+    "telegram": {
+      "enabled": true,
+      "botToken": "<redacted>",
+      "dmPolicy": "disabled",
+      "groupPolicy": "allowlist",
+      "replyToMode": "all",
+      "errorPolicy": "always",
+      "silentErrorReplies": false,
+      "groups": {
+        "-5061953253": {
+          "enabled": true,
+          "ingest": true,
+          "requireMention": false,
+          "groupPolicy": "open",
+          "errorPolicy": "always",
+          "systemPrompt": "此 Telegram 群通过 OpenClaw routing binding 路由到 consultant_agent。按 consultant_agent 工作区规则处理消息：先做意图识别，区分知识库问答、指定对象学习、研究梳理、产品需求、任务梳理、执行任务、执行问题和进度反馈。问答、研究、需求和任务梳理默认不创建正式 Task；只有同一句消息包含口令“学习并入库”时才创建 Learning Job，文字和图片线索进入 Obsidian raw/learning/<learning_id>/，再编译到 wiki，并生成 learning summary；“学习一下 / 研究一下 / 沉淀”等说法不入库。图文学习通过 CDP 获取页面正文和图片元信息；页面图片只记录 URL、title、aria-label、附近文本和尺寸，不得脱离 CDP 再用 HTTP 下载页面图片；用户直接提供的截图/本地附件才可使用 macOS Vision OCR 做中文/英文识别；OCR 结果必须以“图片 OCR 提取”标注插入正文对应位置；视频、iframe 和音频不进入学习链路。学习来源去重只做硬去重：规范化 URL 重复则跳过抓取，raw sha256 重复则跳过编译；wiki 维护允许保守 canonical_key/标题词极高重合合并、主题交叉引用；confidence 只在用户确认、正式 Task 验证或 validated output 回写时升级。TG 中的裸链接、竞对/竞品/对手/参考/对标上下文链接、首页/站点级 URL 只要没有“学习并入库”口令，就不得创建 Learning Job 或写入 wiki。模糊目标先生成 Task Draft，只有用户明确说“建任务 / 按这个执行 / 开始做 / 开始跟进 / 确认创建任务”后才转正式 Task。确认、启动、进展、完成、跳过、授权等正式任务状态变更必须显式包含 task_id 或回复到已绑定任务消息；进展命中 success criteria 时先请求“确认完成”，确认后才 completed，并把 validated output 回写 wiki。不要绕过 JSON 任务状态、Learning Job、Evidence Pack、问题诊断和 wiki 写入规则。 数据采集唯一通道是 OpenClaw 管理的 Chrome CDP http://127.0.0.1:9223；不得使用 curl、requests/urllib/httpx、browserless、Playwright 独立 profile、用户浏览器 profile 直连、搜索引擎/API 或其它抓取 fallback；CDP 不通、未登录或无权限时，只能记录 cdp_unavailable / needs_login_or_permission 并等待用户处理，不能绕路抓取或伪造内容。 每次 CDP 单页采集结束都必须关闭本次采集自己打开的标签页，并写入 browser_tab_closed 日志；SIGTERM/SIGINT 中断或进程退出收尾时，也必须关闭本任务登记过的标签页；不得关闭用户原本已有标签页或 Chrome 窗口；任务仍在运行时不要由外部清理它正在使用的标签，只有单页采集完成、失败/中断收尾或任务结束前发现本任务残留标签时，才清理本任务自己打开的标签。 详情页抓取、结构验证和学习试跑不得临时编写 /tmp/*.js 或 /tmp/*.py 直连 CDP 循环 Page.navigate；必须走 consultant-agent 项目内 CDPAdapter，或使用 ./tools/consultant-agent collect-page、learn-capture、gefei-index、gefei-stage0 正式入口。哥飞案例拆解专栏固定用 gefei-index 建索引，用 gefei-stage0 做慢速阶段 0 验证；详情页必须单页串行，等待页面稳定并执行 30-120 秒内部滚动/停留，正文为空或未稳定只记录 needs_retry_slow_capture，不得 2-3 秒快速翻页。 所有网页抓取、搜索结果读取、页面学习、内容提取、站点监控和资料采集都必须使用 OpenClaw 管理的 Chrome CDP http://127.0.0.1:9223；禁止 web_fetch、web_search、browserless-fetch、curl、requests/urllib/httpx、搜索引擎/API、old/mobile/JSON 端点直连或临时脚本作为替代。"
+        }
+      },
+      "groupAllowFrom": [
+        "*"
+      ]
+    }
+  },
+  "tools": {
+    "profile": "messaging",
+    "alsoAllow": [
+      "browser"
+    ],
+    "subagents": {
+      "tools": {
+        "alsoAllow": [
+          "browser"
+        ],
+        "deny": [
+          "web_fetch",
+          "web_search"
+        ]
+      }
+    },
+    "exec": {
+      "host": "auto",
+      "security": "full",
+      "ask": "off"
+    },
+    "deny": [
+      "web_fetch",
+      "web_search"
+    ]
+  },
+  "models": {
+    "mode": "replace",
+    "providers": {
+      "wsir": {
+        "baseUrl": "https://tarotap.pro/v1",
+        "api": "openai-completions",
+        "apiKey": "<redacted>",
+        "auth": "token",
+        "authHeader": true,
+        "models": [
+          {
+            "id": "gpt-5.5",
+            "name": "gpt-5.5",
+            "api": "openai-completions",
+            "contextWindow": 200000,
+            "maxTokens": 8192,
+            "input": [
+              "text",
+              "image"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "reasoning": false
+          }
+        ]
+      }
+    }
+  },
+  "skills": {
+    "install": {
+      "nodeManager": "npm"
+    }
+  },
+  "wizard": {
+    "lastRunAt": "2026-04-19T04:30:52.749Z",
+    "lastRunVersion": "2026.4.15",
+    "lastRunCommand": "onboard",
+    "lastRunMode": "local"
+  },
+  "meta": {
+    "lastTouchedVersion": "2026.4.29"
+  },
+  "plugins": {
+    "deny": [
+      "codex"
+    ],
+    "entries": {
+      "browser": {
+        "enabled": true
+      },
+      "codex": {
+        "enabled": false
+      },
+      "alibaba": {
+        "enabled": false
+      },
+      "amazon-bedrock": {
+        "enabled": false
+      },
+      "amazon-bedrock-mantle": {
+        "enabled": false
+      },
+      "anthropic": {
+        "enabled": false
+      },
+      "anthropic-vertex": {
+        "enabled": false
+      },
+      "arcee": {
+        "enabled": false
+      },
+      "byteplus": {
+        "enabled": false
+      },
+      "cerebras": {
+        "enabled": false
+      },
+      "chutes": {
+        "enabled": false
+      },
+      "cloudflare-ai-gateway": {
+        "enabled": false
+      },
+      "copilot-proxy": {
+        "enabled": false
+      },
+      "deepinfra": {
+        "enabled": false
+      },
+      "deepseek": {
+        "enabled": false
+      },
+      "fireworks": {
+        "enabled": false
+      },
+      "github-copilot": {
+        "enabled": false
+      },
+      "google": {
+        "enabled": false
+      },
+      "groq": {
+        "enabled": false
+      },
+      "huggingface": {
+        "enabled": false
+      },
+      "kilocode": {
+        "enabled": false
+      },
+      "kimi": {
+        "enabled": false
+      },
+      "litellm": {
+        "enabled": false
+      },
+      "lmstudio": {
+        "enabled": false
+      },
+      "microsoft-foundry": {
+        "enabled": false
+      },
+      "minimax": {
+        "enabled": false
+      },
+      "mistral": {
+        "enabled": false
+      },
+      "moonshot": {
+        "enabled": false
+      },
+      "nvidia": {
+        "enabled": false
+      },
+      "ollama": {
+        "enabled": false
+      },
+      "opencode": {
+        "enabled": false
+      },
+      "opencode-go": {
+        "enabled": false
+      },
+      "openrouter": {
+        "enabled": false
+      },
+      "qianfan": {
+        "enabled": false
+      },
+      "qwen": {
+        "enabled": false
+      },
+      "sglang": {
+        "enabled": false
+      },
+      "stepfun": {
+        "enabled": false
+      },
+      "synthetic": {
+        "enabled": false
+      },
+      "tencent": {
+        "enabled": false
+      },
+      "together": {
+        "enabled": false
+      },
+      "venice": {
+        "enabled": false
+      },
+      "vercel-ai-gateway": {
+        "enabled": false
+      },
+      "vllm": {
+        "enabled": false
+      },
+      "volcengine": {
+        "enabled": false
+      },
+      "voyage": {
+        "enabled": false
+      },
+      "vydra": {
+        "enabled": false
+      },
+      "xai": {
+        "enabled": false
+      },
+      "xiaomi": {
+        "enabled": false
+      },
+      "zai": {
+        "enabled": false
+      },
+      "comfy": {
+        "enabled": false
+      },
+      "deepgram": {
+        "enabled": false
+      },
+      "fal": {
+        "enabled": false
+      },
+      "runway": {
+        "enabled": false
+      },
+      "senseaudio": {
+        "enabled": false
+      },
+      "qqbot": {
+        "enabled": false
+      }
+    }
+  },
+  "bindings": [
+    {
+      "type": "route",
+      "agentId": "community_signal_agent",
+      "match": {
+        "channel": "feishu",
+        "accountId": "default",
+        "peer": {
+          "kind": "group",
+          "id": "oc_db72f7eba6d99f25f22e79678fb65e25"
+        }
+      }
+    },
+    {
+      "type": "route",
+      "agentId": "consultant_agent",
+      "comment": "Route Telegram group 执行顾问 to consultant_agent.",
+      "match": {
+        "channel": "telegram",
+        "accountId": "default",
+        "peer": {
+          "kind": "group",
+          "id": "-5061953253"
+        }
+      }
+    }
+  ],
+  "secrets": {
+    "providers": {
+      "telegram": {
+        "source": "env",
+        "allowlist": [
+          "TELEGRAM_BOT_TOKEN"
+        ]
+      }
+    }
+  }
+}

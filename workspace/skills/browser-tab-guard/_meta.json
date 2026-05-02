@@ -1,0 +1,6 @@
+{
+  "name": "browser-tab-guard",
+  "version": "1.0.0",
+  "description": "Task-scoped browser tab lifecycle manager",
+  "author": "workspace"
+}

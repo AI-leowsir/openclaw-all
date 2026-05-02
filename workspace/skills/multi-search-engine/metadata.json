@@ -1,7 +1,7 @@
 {
   "name": "multi-search-engine",
   "version": "2.0.1",
-  "description": "Multi search engine with 17 engines (8 CN + 9 Global). Supports advanced operators, time filters, privacy engines.",
+  "description": "CDP-only search URL planning reference. Do not use web_fetch, web_search, search APIs, or HTTP clients.",
   "engines": 17,
   "requires_api_key": false
 }
